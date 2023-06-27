@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -50,6 +51,13 @@ public class PeopleController {
         return "redirect:/people";
     }
     
+    @GetMapping("/{id}")
+    public String show(@PathVariable("id") int personId, Model model) {
+        model.addAttribute("person", personDAO.show(personId));
+        //TODO add books
+        return "people/show";
+    }
+    
     @GetMapping("/{personId}/edit")
     public String edit(@PathVariable("personId") int person_id, Model model) {
         model.addAttribute("person", personDAO.show(person_id));
@@ -62,6 +70,13 @@ public class PeopleController {
         if (bindingResult.hasErrors())
             return "people/edit";
         personDAO.update(personId, person);
+        return "redirect:/people";
+    }
+    
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable("id") int id)
+    {
+        personDAO.delete(id);
         return "redirect:/people";
     }
 }

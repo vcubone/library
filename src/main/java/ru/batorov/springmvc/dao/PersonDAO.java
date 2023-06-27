@@ -23,8 +23,8 @@ public class PersonDAO {
         return jdbcTemplate.query("SELECT * FROM person", new BeanPropertyRowMapper<>(Person.class));//имена полей в классе и в бд одинаковые, тогда есть готовый rowmapper
     }
     
-    public Optional<Person> show(String full_name) {
-        return jdbcTemplate.query("SELECT * FROM Person WHERE fullName=?", new BeanPropertyRowMapper<>(Person.class), full_name).stream().findAny();
+    public Optional<Person> show(String fullName) {
+        return jdbcTemplate.query("SELECT * FROM Person WHERE fullName=?", new BeanPropertyRowMapper<>(Person.class), fullName).stream().findAny();
     }
     
     public Person show(int person_id) {
@@ -38,5 +38,10 @@ public class PersonDAO {
     public void update(int person_id, Person updatedperson)
     {
         jdbcTemplate.update("UPDATE Person SET fullName=?, age=? WHERE personId=?", updatedperson.getFullName(), updatedperson.getAge(),  person_id);
+    }
+    
+        public void delete(int personId)
+    {
+        jdbcTemplate.update("DELETE FROM Person WHERE personId=?", personId);
     }
 }
