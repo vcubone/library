@@ -8,8 +8,8 @@ import jakarta.validation.constraints.Size;
 
 @Component
 public class Book {
-    private int book_id;
-    private int person_id;
+    private int bookId;
+    private Integer personId;
     
     @NotEmpty(message = "title shouldn't be empty")
     @Size(min = 2, max = 30, message = "title between 2 and 30")
@@ -19,36 +19,36 @@ public class Book {
     private String author;
     
     @Min(value = 0, message = "release_year > 0")
-    private int release_year;
+    private int releaseYear;
 
-    public Book(int book_id, int person_id,
+    public Book(int bookId, Integer personId,
             @NotEmpty(message = "title shouldn't be empty") @Size(min = 2, max = 30, message = "title between 2 and 30") String title,
             @NotEmpty(message = "author shouldn't be empty") @Size(min = 2, max = 30, message = "author between 2 and 30") String author,
-            @Min(value = 0, message = "release_year > 0") int release_year) {
-        this.book_id = book_id;
-        this.person_id = person_id;
+            @Min(value = 0, message = "release_year > 0") int releaseYear) {
+        this.bookId = bookId;
+        this.personId = personId;
         this.title = title;
         this.author = author;
-        this.release_year = release_year;
+        this.releaseYear = releaseYear;
     }
 
     public Book() {
     }
 
-    public int getBook_id() {
-        return book_id;
+    public int getBookId() {
+        return bookId;
     }
 
-    public void setBook_id(int book_id) {
-        this.book_id = book_id;
+    public void setBookId(int bookId) {
+        this.bookId = bookId;
     }
 
-    public int getPerson_id() {
-        return person_id;
+    public Integer getPersonId() {
+        return personId;
     }
 
-    public void setPerson_id(int person_id) {
-        this.person_id = person_id;
+    public void setPersonId(Integer personId) {
+        this.personId = personId;
     }
 
     public String getTitle() {
@@ -67,13 +67,14 @@ public class Book {
         this.author = author;
     }
 
-    public int getRelease_year() {
-        return release_year;
+    public int getReleaseYear() {
+        return releaseYear;
     }
 
-    public void setRelease_year(int release_year) {
-        this.release_year = release_year;
+    public void setReleaseYear(int releaseYear) {
+        this.releaseYear = releaseYear;
     }
-    
+
+
     
 }

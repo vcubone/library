@@ -33,7 +33,7 @@ public class PeopleController {
     public String all(Model model){
         System.out.println("\n\n\n\nall");
         model.addAttribute("people", personDAO.all());
-        return "people/index";
+        return "people/all";
     }
     
     @GetMapping("/new")
