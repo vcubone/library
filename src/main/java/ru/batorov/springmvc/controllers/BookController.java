@@ -13,17 +13,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 import ru.batorov.springmvc.dao.BookDAO;
+import ru.batorov.springmvc.dao.PersonDAO;
 import ru.batorov.springmvc.models.Book;
+import ru.batorov.springmvc.models.Person;
 
 @Controller
 @RequestMapping("/books")
 public class BookController {
     private final BookDAO bookDAO;
-    
-    
-    
-    public BookController(BookDAO bookDAO) {
+    private final PersonDAO personDAO;
+
+    public BookController(BookDAO bookDAO, PersonDAO personDAO) {
         this.bookDAO = bookDAO;
+        this.personDAO = personDAO;
     }
 
     @GetMapping()
@@ -52,7 +54,7 @@ public class BookController {
         return "books/edit";
     }
     
-     @PatchMapping("/{bookId}/edit")
+    @PatchMapping("/{bookId}/edit")
     public String update(@ModelAttribute("book") @Valid Book book, BindingResult bindingResult,@PathVariable("bookId") int bookId) {
         if (bindingResult.hasErrors())
             return "books/edit";
@@ -61,9 +63,14 @@ public class BookController {
     }
     
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int bookId, Model model) {
-        model.addAttribute("book", bookDAO.show(bookId));
-        //TODO add people
+    public String show(@PathVariable("id") int bookId, Model model, @ModelAttribute("person") Person person) {
+        Book book = bookDAO.show(bookId);
+        model.addAttribute("book", book);
+        
+        if (book.getPersonId() == null)
+            model.addAttribute("people", personDAO.all());
+            else
+            model.addAttribute("owner", personDAO.show(book.getPersonId()));
         return "books/show";
     }
     
@@ -72,5 +79,18 @@ public class BookController {
     {
         bookDAO.delete(id);
         return "redirect:/books";
+    }
+    
+    @PatchMapping("/{bookId}/addowner")
+    public String addowner(@PathVariable("bookId") int bookId, Model model, @ModelAttribute("person") Person person) {
+        bookDAO.addOwner(bookId, person.getPersonId());
+        return "redirect:/books/" + bookId;
+    }
+    
+    @PatchMapping("/{id}/release")
+    public String deleteOwner(@PathVariable("id") int id)
+    {
+        bookDAO.deleteOwner(id);
+        return "redirect:/books/" + id;
     }
 }
