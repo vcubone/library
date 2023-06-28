@@ -47,4 +47,8 @@ public class BookDAO {
     {
         jdbcTemplate.update("UPDATE book SET personId=? WHERE bookId=?", null, bookId);
     }
+    
+    public List<Book> giveBooks(int personId) {
+        return jdbcTemplate.query("SELECT * FROM book WHERE personId=?", new BeanPropertyRowMapper<>(Book.class), personId);
+    }
 }

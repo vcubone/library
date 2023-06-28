@@ -12,6 +12,21 @@
     <p th:text="${person.getPersonId()}">VALUE</p>
 
     
+    <div th:if="${books}">
+        <hr/>
+    <b>Книги:</b>
+    <br/>
+    <table th:each="book : ${books}">
+        <tr th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getReleaseYear()}">book</tr>
+    </table>
+    <hr/>
+    </div>
+    
+    <div th:if="${books.isEmpty()}">
+        <p>Человек пока не взял ни одной книги</p>
+        <hr/>
+    </div>
+    
 <a th:href="@{/people/{id}/edit(id=${person.getPersonId()})}">Edit</a>
 <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getPersonId()})}">
     <input type="submit" value="delete"/>

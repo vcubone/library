@@ -1,5 +1,7 @@
 package ru.batorov.springmvc.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
+import ru.batorov.springmvc.dao.BookDAO;
 import ru.batorov.springmvc.dao.PersonDAO;
+import ru.batorov.springmvc.models.Book;
 import ru.batorov.springmvc.models.Person;
 import ru.batorov.springmvc.util.PersonValidator;
 
@@ -22,11 +26,13 @@ import ru.batorov.springmvc.util.PersonValidator;
 public class PeopleController {
     private final PersonDAO personDAO;
     private final PersonValidator personValidator;
+    private final BookDAO bookDAO;
     
     @Autowired
-    public PeopleController(PersonDAO personDAO, PersonValidator personValidator) {
+    public PeopleController(PersonDAO personDAO, PersonValidator personValidator, BookDAO bookDAO) {
         this.personDAO = personDAO;
         this.personValidator = personValidator;
+        this.bookDAO = bookDAO;
     }
     
     @GetMapping()
@@ -36,6 +42,8 @@ public class PeopleController {
         return "people/all";
     }
     
+
+
     @GetMapping("/new")
     public String newPerson(@ModelAttribute("person") Person person) {
         return "people/new";
@@ -54,6 +62,7 @@ public class PeopleController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int personId, Model model) {
         model.addAttribute("person", personDAO.show(personId));
+        model.addAttribute("books", bookDAO.giveBooks(personId));
         //TODO add books
         return "people/show";
     }
