@@ -83,6 +83,8 @@ public class BookController {
     
     @PatchMapping("/{bookId}/addowner")
     public String addowner(@PathVariable("bookId") int bookId, Model model, @ModelAttribute("person") Person person) {
+        if (person.getPersonId() == 0)
+            return "redirect:/books/" + bookId;
         bookDAO.addOwner(bookId, person.getPersonId());
         return "redirect:/books/" + bookId;
     }
